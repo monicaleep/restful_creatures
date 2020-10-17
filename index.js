@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
   res.render('home')
 })
 
-// index page
+// index page - dinosaurs
 app.get('/dinosaurs', (req, res) => {
   const dinosaurs = fs.readFileSync('./dinosaurs.json');
   // take a json object and return a js object
@@ -25,24 +25,50 @@ app.get('/dinosaurs', (req, res) => {
       return dino.name.toLowerCase() === filter.toLowerCase();
     });
   }
-  res.render('index', {
+  res.render('dinosaurs/index', {
     dinosaurs: dinoData
   });
 })
-// new page
-app.get('/dinosaurs/new', (req, res) => {
 
-  res.render('new')
+// index page - creatures
+app.get('/prehistoric_creatures', (req, res) => {
+  const creatures = fs.readFileSync('./prehistoric_creatures.json');
+  // take a json object and return a js object
+  let creatureData = JSON.parse(creatures);
+
+  res.render('prehistoric_creatures/index', {
+    creatures: creatureData
+  });
 })
-//show page
+
+// new page - dinosaurs
+app.get('/dinosaurs/new', (req, res) => {
+  res.render('dinosaurs/new')
+})
+
+// new page - creatures
+app.get('/prehistoric_creatures/new', (req, res) => {
+  res.render('prehistoric_creatures/new')
+})
+
+//show page - dinosaurs
 app.get('/dinosaurs/:id', (req, res) => {
   const index = parseInt(req.params.id)
   const dinosaurs = fs.readFileSync('./dinosaurs.json');
   const dinoData = JSON.parse(dinosaurs);
-  dinoData[index].id = index
-  res.render('show', {
-    dino: dinoData[index]
-  })
+  res.render('dinosaurs/show', {
+    dino: dinoData[index],
+    dinoid: index})
+})
+
+//show page - creatures
+app.get('/prehistoric_creatures/:id', (req, res) => {
+  const index = parseInt(req.params.id)
+  const creatures = fs.readFileSync('./prehistoric_creatures.json');
+  const creatureData = JSON.parse(creatures);
+  res.render('prehistoric_creatures/show', {
+    creature: creatureData[index],
+    creatureID: index})
 })
 
 app.post('/dinosaurs', (req, res) => {
