@@ -71,6 +71,21 @@ app.get('/prehistoric_creatures/:id', (req, res) => {
     creatureID: index})
 })
 
+// create route - creatures
+app.post('/prehistoric_creatures',(req,res)=>{
+  //read from the 'database'
+  const creatures = fs.readFileSync('./prehistoric_creatures.json');
+  // take a json object and return a js object
+  const creatureData = JSON.parse(creatures);
+  // add the new data to the array
+  creatureData.push(req.body);
+  // update the database
+  fs.writeFileSync('./prehistoric_creatures.json',JSON.stringify(creatureData));
+  //redirect to the GET /prehistoric_creatures route
+  res.redirect('/prehistoric_creatures')
+})
+
+// create route - dinosaurs
 app.post('/dinosaurs', (req, res) => {
   const dinosaurs = fs.readFileSync('./dinosaurs.json');
   // take a json object and return a js object
@@ -78,7 +93,6 @@ app.post('/dinosaurs', (req, res) => {
   dinoData.push(req.body);
   // save dinosaurs to the data.json file
   fs.writeFileSync('./dinosaurs.json', JSON.stringify(dinoData));
-
   //redirect to the GET /dinosaurs route (index)
   res.redirect('/dinosaurs');
 })
